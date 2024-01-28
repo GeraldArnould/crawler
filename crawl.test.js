@@ -10,7 +10,7 @@ test('trailing slash is removed', () => {
         expect(normalizeURL('http://blog.boot.dev/path///')).toBe('blog.boot.dev/path');
 });
 
-test('url without path', () => {
+test('url without path normalize to default path', () => {
         expect(normalizeURL('https://blog.boot.dev')).toBe('blog.boot.dev/');
         expect(normalizeURL('https://blog.boot.dev/')).toBe('blog.boot.dev/');
 });
