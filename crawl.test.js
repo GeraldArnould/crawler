@@ -1,6 +1,6 @@
 //const { test, expect } = require('jest/globals');
 
-const { normalizeURL } = require('./crawl')
+import normalizeURL from './crawl';
 
 test('trailing slash is removed', () => {
         expect(normalizeURL('https://blog.boot.dev/path/')).toBe('blog.boot.dev/path');

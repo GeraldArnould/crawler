@@ -6,7 +6,5 @@ function normalizeURL(url) {
         return (urlObj.hostname + urlObj.pathname.replace(/\/+$/, ''));
 }
 
-module.exports = {
-        normalizeURL
-}
+export default normalizeURL;
 
