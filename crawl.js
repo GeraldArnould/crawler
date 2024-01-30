@@ -1,9 +1,10 @@
 function normalizeURL(url) {
         const urlObj = new URL(url);
         if (urlObj.pathname === '/') {
-                return (urlObj.hostname + urlObj.pathname);
+                return urlObj;
         }
-        return (urlObj.hostname + urlObj.pathname.replace(/\/+$/, ''));
+        urlObj.pathname = urlObj.pathname.replace(/\/+$/, '');
+        return (urlObj);
 }
 
 async function crawlPage(url) {
