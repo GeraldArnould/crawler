@@ -1,3 +1,5 @@
+import getUrlsFromHtml from "./parse";
+
 function normalizeURL(url) {
         const urlObj = new URL(url);
         if (urlObj.pathname === '/') {
@@ -7,9 +9,25 @@ function normalizeURL(url) {
         return (urlObj);
 }
 
-async function crawlPage(url) {
+function isFromBaseDomain(url, baseURL) {
+        return (url.hostname === baseURL.hostname);
+}
+
+async function crawlPage(baseURL, currentURL, pages) {
+        // make sure we stay on the same domain
+        if (!isFromBaseDomain(currentURL, baseURL)) {
+                return pages;
+        }
+
+        // keep track of the number of times a page is visited
+        const thisURL = normalizeURL(currentURL).href;
+        if (thisURL in pages) {
+                pages[thisURL] += 1;
+        } else {
+                pages[thisURL] = 1;
+        }
         try {
-                const resp = await fetch(url, {
+                const resp = await fetch(thisURL, {
                         method: 'GET',
                         mode: 'cors',
                         // headers: {
@@ -38,9 +56,18 @@ async function crawlPage(url) {
                         return;
                 }
                 const textBody = await resp.text();
-                console.log(textBody);
+                const urls = getUrlsFromHtml(textBody, baseURL);
+                for ( const url of urls) {
+                        const urlObj = new URL(url);
+                        if (isFromBaseDomain(urlObj, baseURL)) {
+                                crawlPage(baseURL, urlObj, pages);
+                        } else {
+                                continue;
+                        }
+                }
+                console.log(pages);
         } catch (err) {
-                console.log(`Couldn't fetch ${url}: ${err.message}`);
+                console.log(`Couldn't fetch ${thisURL}: ${err.message}`);
                 return;
         }
 

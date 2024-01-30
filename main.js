@@ -1,6 +1,6 @@
 import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
-import { crawlPage } from './crawl';
+import { crawlPage, normalizeURL } from './crawl';
 
 var argv = yargs(hideBin(process.argv))
         .command(
@@ -24,5 +24,6 @@ var argv = yargs(hideBin(process.argv))
 
 const url = new URL(argv.url);
 console.log(`Crawling started with base URL: ${url.href}`);
-
-const parsed = crawlPage(url.href);
+const pages = new Object();
+pages[normalizeURL(url).href] = 0;
+const parsed = crawlPage(url, url, pages);
