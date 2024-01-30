@@ -6,7 +6,7 @@ function getUrlsFromHtml(body, baseURL) {
         dom.window.document.querySelectorAll('a').forEach(link => {
                 try {
                         const protocols = ['http:', 'https:'];
-                        const url = new URL(link.href, baseURL);
+                        const url = new URL(link.href, baseURL.href);
                         if (!protocols.includes(url.protocol)) {
                                 console.error(`unknown protocol "${url.protocol}" for url ${url.href}`);
                         } else {

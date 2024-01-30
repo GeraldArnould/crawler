@@ -9,7 +9,7 @@ test('parse valid HTML', () => {
                 </a>
             </body>
         </html>`;
-    const baseURL = "https://blog.boot.dev";
+    const baseURL = new URL("https://blog.boot.dev");
     const urls = getUrlsFromHtml(htmlBody, baseURL);
     expect(urls[0]).toBe('https://blog.boot.dev/');
 });
@@ -29,7 +29,7 @@ test('parse relative urls', () => {
             <a href="/relative3/">A third relative link</a>
             </body>
     </html>`;
-    const baseURL = "https://blog.boot.dev";
+    const baseURL = new URL("https://blog.boot.dev");
     const urls = getUrlsFromHtml(htmlBody, baseURL);
     expect(urls[0]).toBe('https://blog.boot.dev/');
     expect(urls[1]).toBe('https://blog.boot.dev/relative/path');
@@ -58,7 +58,7 @@ test('url with query parameters', () => {
         'https://example.com/relative2?param=value2&bar=value3',
         'https://example.com/relative3/?foo=bar&baz=bat',
     ];
-    const baseURL = 'https://example.com';
+    const baseURL = new URL('https://example.com');
     const urls = getUrlsFromHtml(htmlBody, baseURL);
     expected.forEach((value, idx) => {
         expect(urls[idx]).toBe(value);
@@ -70,7 +70,7 @@ test('invalid urls', () => {
     <a href="htp:/invalid">Invalid URL</a>
     <a href="/"</a>
     `;
-    const baseURL = 'https://example.com';
+    const baseURL = new URL('https://example.com');
     const urls = getUrlsFromHtml(htmlBody, baseURL);
     expect(urls[0]).toBe('https://example.com/');
     expect(urls.length).toBe(1);
